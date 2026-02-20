@@ -1,0 +1,46 @@
+# MANIFEST.in - Fichiers à inclure dans le package PyPI
+
+# Documentation
+include README.md
+include DOCUMENTATION.md
+include AI_GUIDE.md
+include PYPI_DEPLOY.md
+include DEPLOY_QUICK.md
+include LICENSE
+include pyproject.toml
+include setup.cfg
+
+# Package principal
+recursive-include visionit *.py
+recursive-include visionit/templates *.html
+recursive-include visionit/templates/components *.html
+
+# Tests
+recursive-include tests *.py
+
+# Exclusions strictes
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude __pycache__
+global-exclude .git
+global-exclude .gitignore
+global-exclude .qwen
+global-exclude .env
+global-exclude .venv
+global-exclude venv
+global-exclude ENV
+global-exclude env
+global-exclude dist
+global-exclude build
+global-exclude *.egg-info
+global-exclude .pytest_cache
+global-exclude .coverage
+global-exclude htmlcov
+global-exclude *.spec
+global-exclude mon_app
+global-exclude test_app
+global-exclude mon_app/*
+global-exclude test_app/*
+global-exclude .DS_Store
+global-exclude Thumbs.db
