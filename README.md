@@ -4,6 +4,25 @@
 
 ---
 
+## 🍀 Sur Mac - Test Rapide
+
+```bash
+# 1. Aller dans le dossier
+cd /Users/omerlinks/Desktop/vidionit\ framework/visionit
+
+# 2. Activer l'environnement
+source venv/bin/activate
+
+# 3. Lancer le test
+python test_mac_window.py
+
+# ✅ Une fenêtre Mac native s'ouvre !
+```
+
+**Si ça ne marche pas :** → Lisez [MAC_GUIDE.md](MAC_GUIDE.md)
+
+---
+
 ## ⚡ Démarrage en 30 Secondes
 
 ```bash
@@ -56,6 +75,7 @@ python main.py
 
 | Fichier | Description |
 |---------|-------------|
+| **[MAC_GUIDE.md](MAC_GUIDE.md)** | 🍀 **Guide spécial macOS** - Ouvre la fenêtre sur Mac |
 | **[COMMENT_FAIRE.md](COMMENT_FAIRE.md)** | 📘 Guide pratique "Comment faire" |
 | **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** | 🔧 Dépannage (fenêtre ne s'ouvre pas, etc.) |
 | **[DOCUMENTATION.md](DOCUMENTATION.md)** | 📖 Documentation complète avec exemples |

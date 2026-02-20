@@ -1,14 +1,17 @@
-"""demo_window - CORRECTED Desktop Application.
+"""demo_window - Application Desktop pour macOS.
 
-Application desktop avec fenêtre native qui s'affiche VRAIMENT !
+Utilise pywebview directement pour une vraie fenêtre sur Mac.
 """
 
-from nicegui import ui, app
+import threading
+import time
+import webview
+from nicegui import ui
 from pathlib import Path
 import json
 
 # === CONFIGURATION ===
-WINDOW_TITLE = "🖥️ Démo VisionIT - Fenêtre Desktop"
+WINDOW_TITLE = "🖥️ Démo VisionIT - Mac"
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 700
 PORT = 8080
@@ -18,161 +21,119 @@ PORT = 8080
 def main_page():
     """Page principale."""
     
-    # Style global
     ui.colors(primary='#2563eb', secondary='#64748b', accent='#8b5cf6')
     
-    # === EN-TÊTE ===
+    # Charger les infos
+    try:
+        info_file = Path(__file__).parent / "info.json"
+        with open(info_file, "r", encoding="utf-8") as f:
+            info = json.load(f)
+    except:
+        info = {'project_name': 'demo_window', 'author': 'Vision IT', 'version': '1.0.0'}
+    
+    # En-tête
     with ui.header().classes('w-full bg-blue-600 text-white'):
         with ui.row().classes('w-full items-center px-4 py-2'):
             ui.icon("desktop_windows", size="32px")
-            ui.label("🎉 Application Desktop VisionIT").classes("text-xl font-bold ml-2")
-            ui.label("✅ FENÊTRE NATIVE FONCTIONNELLE").classes("text-sm ml-4 opacity-90")
+            ui.label(f"🎉 {info['project_name']}").classes("text-xl font-bold ml-2")
+            ui.label(f"v{info['version']}").classes("text-sm ml-4 opacity-90")
     
-    # === CONTENU ===
+    # Contenu
     with ui.column().classes('w-full p-6 gap-6'):
         
         # Message de succès
         with ui.card().classes('w-full p-6 bg-green-50 border-l-4 border-green-500'):
-            ui.label("✅ LA FENÊTRE S'AFFICHE CORRECTEMENT !").classes("text-2xl font-bold text-green-700")
-            ui.label("Votre framework VisionIT fonctionne parfaitement.").classes("text-gray-700 mt-2")
+            ui.label("✅ FENÊTRE MAC FONCTIONNELLE !").classes("text-2xl font-bold text-green-700")
+            ui.label("pywebview + NiceGUI fonctionnent sur votre Mac !").classes("text-gray-700 mt-2")
         
-        # Informations
+        # Infos
         with ui.card().classes('w-full p-6'):
             ui.label("📋 Informations").classes("text-xl font-semibold mb-4")
             
-            try:
-                info_file = Path(__file__).parent / "info.json"
-                if info_file.exists():
-                    with open(info_file, "r", encoding="utf-8") as f:
-                        info = json.load(f)
-                    
-                    with ui.grid().classes('grid-cols-3 gap-4'):
-                        with ui.card().classes('p-4 bg-blue-50'):
-                            ui.label("Application").classes("text-gray-600 text-sm")
-                            ui.label(info.get('project_name', 'N/A')).classes("text-lg font-bold text-blue-600")
-                        
-                        with ui.card().classes('p-4 bg-green-50'):
-                            ui.label("Auteur").classes("text-gray-600 text-sm")
-                            ui.label(info.get('author', 'N/A')).classes("text-lg font-bold text-green-600")
-                        
-                        with ui.card().classes('p-4 bg-purple-50'):
-                            ui.label("Version").classes("text-gray-600 text-sm")
-                            ui.label(info.get('version', '1.0.0')).classes("text-lg font-bold text-purple-600")
-            except Exception as e:
-                ui.label(f"Erreur lecture info: {e}").classes("text-red-500")
+            with ui.grid().classes('grid-cols-3 gap-4'):
+                with ui.card().classes('p-4 bg-blue-50'):
+                    ui.label("Application").classes("text-gray-600 text-sm")
+                    ui.label(info.get('project_name', 'N/A')).classes("text-lg font-bold text-blue-600")
+                
+                with ui.card().classes('p-4 bg-green-50'):
+                    ui.label("Auteur").classes("text-gray-600 text-sm")
+                    ui.label(info.get('author', 'N/A')).classes("text-lg font-bold text-green-600")
+                
+                with ui.card().classes('p-4 bg-purple-50'):
+                    ui.label("Version").classes("text-gray-600 text-sm")
+                    ui.label(info.get('version', '1.0.0')).classes("text-lg font-bold text-purple-600")
         
-        # Boutons de test
+        # Boutons
         with ui.card().classes('w-full p-6'):
-            ui.label("🎮 Test des Boutons").classes("text-xl font-semibold mb-4")
+            ui.label("🎮 Test").classes("text-xl font-semibold mb-4")
             
             with ui.row().classes('gap-4 flex-wrap'):
                 ui.button("👍 Primaire", color="primary") \
-                  .on('click', lambda: ui.notify("✅ Bouton primaire cliqué !", color="positive"))
-                
+                  .on('click', lambda: ui.notify("✅ Ça marche !", color="positive"))
                 ui.button("✅ Succès", color="positive") \
-                  .on('click', lambda: ui.notify("🎉 Action réussie !", color="positive", position="top"))
-                
-                ui.button("⚠️ Attention", color="warning") \
-                  .on('click', lambda: ui.notify("⚠️ Attention !", color="warning", position="top"))
-                
+                  .on('click', lambda: ui.notify("🎉 Réussi !", color="positive"))
+                ui.button("⚠️ Warning", color="warning") \
+                  .on('click', lambda: ui.notify("⚠️ Attention !", color="warning"))
                 ui.button("❌ Erreur", color="negative") \
-                  .on('click', lambda: ui.notify("❌ Erreur !", color="negative", position="top"))
-                
-                ui.button("ℹ️ Info", color="info") \
-                  .on('click', lambda: ui.notify("ℹ️ Information", color="info", position="top"))
+                  .on('click', lambda: ui.notify("❌ Erreur !", color="negative"))
         
         # Inputs
         with ui.card().classes('w-full p-6'):
-            ui.label("📝 Champs de Saisie").classes("text-xl font-semibold mb-4")
-            
+            ui.label("📝 Champs").classes("text-xl font-semibold mb-4")
             with ui.row().classes('w-full gap-4'):
                 ui.input("Nom", placeholder="Votre nom").classes('flex-1')
-                ui.input("Email", placeholder="email@exemple.com").classes('flex-1')
-            
-            with ui.row().classes('w-full mt-4'):
-                ui.textarea("Message", placeholder="Votre message...").classes('flex-1')
+                ui.input("Email", placeholder="email@mac.com").classes('flex-1')
         
-        # Slider et contrôles
-        with ui.card().classes('w-full p-6'):
-            ui.label("🎚️ Contrôles").classes("text-xl font-semibold mb-4")
-            
-            with ui.row().classes('gap-8 items-center'):
-                slider = ui.slider(min=0, max=100, value=50).props('label')
-                ui.label().bind_text_from(slider, 'value', lambda v: f"Valeur: {v}")
-                
-                ui.checkbox("Activer option")
-                ui.switch("Mode sombre")
-        
-        # Grande notification
-        def show_big_notification():
-            ui.notify(
-                "🎊 BRAVO ! La fenêtre desktop fonctionne parfaitement !\n"
-                "Votre application VisionIT est opérationnelle.",
-                color="positive",
-                position="center",
-                timeout=5000,
-                multi_line=True
-            )
+        # Test final
+        def show_success():
+            ui.notify("🎊 BRAVO ! Mac + VisionIT = ❤️", color="positive", position="center", timeout=4000)
         
         with ui.card().classes('w-full p-8 text-center'):
-            ui.label("🚀 Test Final").classes("text-2xl font-bold mb-4")
-            ui.button(
-                "🎉 CLIQUEZ-MOI POUR TESTER",
-                on_click=show_big_notification,
-                color="primary"
-            ).classes('text-xl px-12 py-6')
-        
-        # Features
-        with ui.row().classes('w-full gap-4'):
-            with ui.card().classes('flex-1 p-6 text-center'):
-                ui.icon("desktop_windows", size="64px").classes("text-blue-600")
-                ui.label("Fenêtre Native").classes("text-xl font-semibold mt-2")
-                ui.label("pywebview").classes("text-gray-600")
-            
-            with ui.card().classes('flex-1 p-6 text-center'):
-                ui.icon("palette", size="64px").classes("text-green-600")
-                ui.label("UI Moderne").classes("text-xl font-semibold mt-2")
-                ui.label("NiceGUI + Tailwind").classes("text-gray-600")
-            
-            with ui.card().classes('flex-1 p-6 text-center'):
-                ui.icon("build", size="64px").classes("text-purple-600")
-                ui.label("Exécutable").classes("text-xl font-semibold mt-2")
-                ui.label("PyInstaller").classes("text-gray-600")
+            ui.label("🚀 Tout Fonctionne !").classes("text-2xl font-bold mb-4")
+            ui.button("🎉 CLIQUEZ-MOI !", on_click=show_success, color="primary").classes('text-xl px-12 py-6')
     
-    # === PIED DE PAGE ===
+    # Footer
     with ui.footer().classes('w-full bg-gray-100'):
         with ui.row().classes('w-full justify-between px-4 py-2'):
-            ui.label("© 2024 VisionIT Framework").classes('text-gray-600 text-sm')
-            ui.label("✅ Fenêtre Desktop Fonctionnelle").classes('text-green-600 font-bold text-sm')
+            ui.label("© 2024 VisionIT - macOS").classes('text-gray-600 text-sm')
+            ui.label("✅ pywebview + NiceGUI").classes('text-green-600 font-bold text-sm')
 
 
-# === POINT D'ENTRÉE ===
-if __name__ == "__main__":
-    print("\n" + "="*70)
-    print("🚀 LANCEMENT DE L'APPLICATION DESKTOP VISIONIT")
-    print("="*70)
+def start_server():
+    """Start NiceGUI server."""
+    ui.run(host='127.0.0.1', port=PORT, reload=False, show=False, uvicorn_logging_level='error')
+
+
+def create_window():
+    """Create Mac desktop window with pywebview."""
+    
+    print("\n" + "="*60)
+    print("🍎 VisionIT - Application Desktop Mac")
+    print("="*60)
     print(f"📝 Titre: {WINDOW_TITLE}")
     print(f"📐 Taille: {WINDOW_WIDTH}x{WINDOW_HEIGHT}")
     print(f"🌐 Port: {PORT}")
-    print(f"🖥️  Mode: NATIF (fenêtre desktop avec pywebview)")
-    print("="*70)
-    print("\n⏳ Ouverture de la fenêtre...")
-    print("Si la fenêtre ne s'ouvre pas, allez sur: http://127.0.0.1:8080\n")
+    print("="*60)
+    print("\n⏳ Ouverture...\n")
     
-    # Configuration pour fenêtre native
-    app.native.title = WINDOW_TITLE
-    app.native.width = WINDOW_WIDTH
-    app.native.height = WINDOW_HEIGHT
+    # Start server
+    server = threading.Thread(target=start_server, daemon=True)
+    server.start()
+    time.sleep(2)
     
-    # Lancement AVEC support natif
-    ui.run(
+    # Create window
+    window = webview.create_window(
         title=WINDOW_TITLE,
-        host="127.0.0.1",
-        port=PORT,
-        reload=False,
-        show=True,  # Ouvre automatiquement
-        native=True,  # Mode fenêtre desktop
-        window_size=(WINDOW_WIDTH, WINDOW_HEIGHT),
-        fullscreen=False,
-        frameless=False,
+        url=f"http://127.0.0.1:{PORT}",
+        width=WINDOW_WIDTH,
+        height=WINDOW_HEIGHT,
+        resizable=True,
+        min_size=(400, 300),
     )
+    
+    print("✅ Fenêtre ouverte !\n")
+    webview.start()
+
+
+if __name__ == "__main__":
+    create_window()
