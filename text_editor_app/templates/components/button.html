@@ -1,0 +1,37 @@
+<!-- Button Component -->
+{% set button_types = {
+    'primary': 'bg-blue-600 hover:bg-blue-700 text-white',
+    'secondary': 'bg-gray-600 hover:bg-gray-700 text-white',
+    'success': 'bg-green-600 hover:bg-green-700 text-white',
+    'danger': 'bg-red-600 hover:bg-red-700 text-white',
+    'warning': 'bg-yellow-600 hover:bg-yellow-700 text-white',
+    'outline': 'bg-transparent border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white',
+    'ghost': 'bg-transparent hover:bg-gray-100 text-gray-700'
+} %}
+
+<button type="{{ button_type|default('button') }}"
+        class="
+            {{ button_sizes|default({
+                'sm': 'px-3 py-1.5 text-sm',
+                'md': 'px-4 py-2 text-base',
+                'lg': 'px-6 py-3 text-lg'
+            })[button_size|default('md')] }}
+            {{ button_types[button_style|default('primary')] }}
+            rounded-lg font-medium
+            transition-all duration-200
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+            disabled:opacity-50 disabled:cursor-not-allowed
+            {{ button_class|default('') }}
+        "
+        {% if button_disabled %}disabled{% endif %}
+        {% if button_onclick %}onclick="{{ button_onclick }}"{% endif %}
+        {% if button_id %}id="{{ button_id }}"{% endif %}
+        {% if button_name %}name="{{ button_name }}"{% endif %}
+>
+    {% if button_icon %}
+    <svg class="w-5 h-5 {{ 'mr-2' if button_text else '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {{ button_icon|safe }}
+    </svg>
+    {% endif %}
+    {% if button_text %}{{ button_text }}{% endif %}
+</button>

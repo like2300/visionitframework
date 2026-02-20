@@ -1,0 +1,34 @@
+{
+    "app_name": "demo_window",
+    "main_module": "main",
+    "icon": null,
+    "onefile": true,
+    "windowed": false,
+    "hidden_imports": [
+        "nicegui",
+        "nicegui.elements",
+        "nicegui.page",
+        "uvicorn",
+        "webview"
+    ],
+    "exclude_modules": [
+        "matplotlib",
+        "numpy",
+        "pandas",
+        "scipy"
+    ],
+    "add_data": [
+        [
+            "templates",
+            "templates"
+        ],
+        [
+            "static",
+            "static"
+        ],
+        [
+            "db",
+            "db"
+        ]
+    ]
+}
